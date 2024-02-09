@@ -4,6 +4,10 @@ namespace ATM;
 
 static class ATM
 {
+    private static string cardnumber = "";
+    /// <summary>
+    /// the main menu of the ATM
+    /// </summary>
     public static void Menu()
     {
         Console.WriteLine("\tWelcome to the my system!");
@@ -33,7 +37,9 @@ static class ATM
             }
         }
     }
-
+    /// <summary>
+    /// if user want to start the ATM
+    /// </summary>
     public static void StartMenu()
     {
         System.Console.Write("\tEnter Your Card Number: ");
@@ -51,12 +57,19 @@ static class ATM
             Console.WriteLine("\tUser not exists or Password wrong");
             Menu();
         }
+        cardnumber = cardNO;
         UserMenu();
     }
+    /// <summary>
+    /// if user want to exit the ATM
+    /// </summary>
     public static void ExitMenu()
     {
         System.Console.WriteLine("\tHave a Good Time");
     }
+    /// <summary>
+    /// after correct card and password head to the user menu
+    /// </summary>
     public static void UserMenu()
     {
         System.Console.WriteLine("1-Cash withdrawa");
@@ -96,23 +109,64 @@ static class ATM
             }
         }
     }
-
+    /// <summary>
+    /// menu that handles card to card for user
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
     private static void CardToCard()
     {
         throw new NotImplementedException();
     }
-
+    /// <summary>
+    /// menu that handles view the balance for user
+    /// </summary>
     private static void ViewBalance()
     {
+        User user = new(cardnumber);
+        float balance = user.getBalance();
+        System.Console.WriteLine("Your Balance is : {0}", balance);
+        System.Console.WriteLine("What do you want to do next : ");
+        System.Console.WriteLine("1- Return to the menu");
+        System.Console.WriteLine("0- Exit");
+        bool success = int.TryParse(Console.ReadLine(), out int choice);
+        if (success == false)
+        {
+            System.Console.WriteLine("Please write Numbers!");
+            UserMenu();
+        }
+        else
+        {
+            switch (choice)
+            {
+                case 1:
+                    UserMenu();
+                    break;
+                case 0:
+                    ExitMenu();
+                    break;
+                default:
+                    System.Console.WriteLine("\tPlease choose from menu!");
+                    UserMenu();
+                    break;
 
+            }
+        }
         // throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// menu that handles deposite to the card for user
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
     private static void Deposit()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// menu that handles draw cash for user
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
     private static void CashWithDraw()
     {
         throw new NotImplementedException();

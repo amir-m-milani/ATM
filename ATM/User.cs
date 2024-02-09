@@ -6,7 +6,7 @@ namespace ATM;
 
 class User
 {
-    private Dictionary<string, string> users = [];
+    private Dictionary<string, Dictionary<string, object>> users = [];
     private string cardNO;
     private string password;
     private float balance;
@@ -16,15 +16,24 @@ class User
         this.password = password;
         this.balance = balance;
     }
+    public User(string cardNO, string password)
+    {
+        this.cardNO = cardNO;
+        this.password = password;
+    }
+    public User(string cardNO)
+    {
+        this.cardNO = cardNO;
+    }
     /// <summary>
-    /// returns true if user does not exists
+    /// returns true if user does not exists. just use for testing
     /// </summary>
     /// <returns>bool</returns>
     public bool AddUser()
     {
         if (!this.users.ContainsKey(this.cardNO))
             return false;
-        this.users.Add(this.cardNO, this.password);
+        this.users.Add(this.cardNO, new Dictionary<string, object>() { { "password", this.password }, { "balance", this.balance } });
         return true;
     }
     /// <summary>
@@ -36,7 +45,7 @@ class User
     {
         if (!this.users.ContainsKey(this.cardNO))
             return false;
-        if (this.users[this.cardNO] != this.password)
+        if ((string)this.users[this.cardNO]["password"] != this.password)
             return false;
         return true;
     }
@@ -49,6 +58,14 @@ class User
         if (!this.users.ContainsKey(this.cardNO))
             return false;
         return true;
+    }
+    /// <summary>
+    /// retrun the balance of the user
+    /// </summary>
+    /// <returns>float</returns>
+    public float getBalance()
+    {
+        return (float)this.users[this.cardNO]["balance"];
     }
     /*
     public void SaveUserToFile(string cardNumber, string password)
