@@ -10,9 +10,11 @@ static class ATM
     /// </summary>
     public static void Menu()
     {
+        Console.Clear();
         Console.WriteLine("\tWelcome to the my system!");
         Console.WriteLine("\t1-Start");
         Console.WriteLine("\t0-Exit");
+        Console.Write("\tYour choice: ");
         bool success = int.TryParse(Console.ReadLine(), out int choice);
         if (success == false)
         {
@@ -42,6 +44,7 @@ static class ATM
     /// </summary>
     public static void StartMenu()
     {
+        Console.Clear();
         System.Console.Write("\tEnter Your Card Number: ");
         string cardNO = Console.ReadLine();
         System.Console.Write("\tEnter Your Password: ");
@@ -66,16 +69,20 @@ static class ATM
     public static void ExitMenu()
     {
         System.Console.WriteLine("\tHave a Good Time");
+        Environment.Exit(0);
     }
     /// <summary>
     /// after correct card and password head to the user menu
     /// </summary>
     public static void UserMenu()
     {
-        System.Console.WriteLine("1-Cash withdrawa");
+        Console.Clear();
+        System.Console.WriteLine("1-Draw Cash");
         System.Console.WriteLine("2-Deposit");
         System.Console.WriteLine("3-Balance");
         System.Console.WriteLine("4-Card To card");
+        System.Console.WriteLine("0-Exit");
+        System.Console.Write("Your choice: ");
         bool success = int.TryParse(Console.ReadLine(), out int choice);
         if (success == false)
         {
@@ -124,10 +131,12 @@ static class ATM
     {
         User user = new(cardnumber);
         float balance = user.getBalance();
+        Console.Clear();
         System.Console.WriteLine("Your Balance is : {0}", balance);
         System.Console.WriteLine("What do you want to do next : ");
         System.Console.WriteLine("1- Return to the menu");
         System.Console.WriteLine("0- Exit");
+        System.Console.Write("Your choice: ");
         bool success = int.TryParse(Console.ReadLine(), out int choice);
         if (success == false)
         {
@@ -157,18 +166,105 @@ static class ATM
     /// <summary>
     /// menu that handles deposite to the card for user
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     private static void Deposit()
     {
-        throw new NotImplementedException();
+        User user = new(cardnumber);
+        System.Console.WriteLine("How much do you want to deposit? ");
+        System.Console.Write("Dollars: ");
+        bool success = float.TryParse(Console.ReadLine(), out float cash);
+        if (success == false)
+        {
+            System.Console.WriteLine("Please write Numbers!");
+            Deposit();
+        }
+        else
+        {
+            // add cash to balance
+            user.addCashToBalance_Deposit(cash);
+            System.Console.WriteLine("It was success");
+            System.Console.WriteLine("Your new Balance is : {0}", user.getBalance());
+            System.Console.WriteLine("What next ? ");
+            System.Console.WriteLine("1- Another Work");
+            System.Console.WriteLine("0- Exit");
+            success = int.TryParse(Console.ReadLine(), out int choice);
+            if (success == false)
+            {
+                System.Console.WriteLine("Please write Numbers!");
+                UserMenu();
+            }
+            else
+            {
+                switch (choice)
+                {
+                    case 1:
+                        UserMenu();
+                        break;
+                    case 0:
+                        ExitMenu();
+                        break;
+                    default:
+                        System.Console.WriteLine("\tPlease choose from menu!");
+                        UserMenu();
+                        break;
+
+                }
+            }
+        }
     }
 
     /// <summary>
     /// menu that handles draw cash for user
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     private static void CashWithDraw()
     {
-        throw new NotImplementedException();
+        User user = new(cardnumber);
+        System.Console.WriteLine("How much do you want to draw? ");
+        System.Console.Write("Dollars: ");
+        bool success = float.TryParse(Console.ReadLine(), out float cash);
+        if (success == false)
+        {
+            System.Console.WriteLine("Please write Numbers!");
+            CashWithDraw();
+        }
+        else
+        {
+            // draw cash
+            if (!user.DrawCash(cash))
+            {
+                System.Console.WriteLine("Your Balance is LOW!");
+                System.Console.WriteLine("Your new Balance is : {0}", user.getBalance());
+            }
+            else
+            {
+                System.Console.WriteLine("It was success");
+                System.Console.WriteLine("Your new Balance is : {0}", user.getBalance());
+            }
+            System.Console.WriteLine("What next ? ");
+            System.Console.WriteLine("1- Another Work");
+            System.Console.WriteLine("0- Exit");
+            success = int.TryParse(Console.ReadLine(), out int choice);
+            if (success == false)
+            {
+                System.Console.WriteLine("Please write Numbers!");
+                UserMenu();
+            }
+            else
+            {
+                switch (choice)
+                {
+                    case 1:
+                        UserMenu();
+                        break;
+                    case 0:
+                        ExitMenu();
+                        break;
+                    default:
+                        System.Console.WriteLine("\tPlease choose from menu!");
+                        UserMenu();
+                        break;
+
+                }
+            }
+        }
     }
 }

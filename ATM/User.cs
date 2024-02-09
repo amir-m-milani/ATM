@@ -6,7 +6,7 @@ namespace ATM;
 
 class User
 {
-    private Dictionary<string, Dictionary<string, object>> users = [];
+    private static Dictionary<string, Dictionary<string, object>> users = [];
     private string cardNO;
     private string password;
     private float balance;
@@ -31,9 +31,9 @@ class User
     /// <returns>bool</returns>
     public bool AddUser()
     {
-        if (!this.users.ContainsKey(this.cardNO))
+        if (users.ContainsKey(this.cardNO))
             return false;
-        this.users.Add(this.cardNO, new Dictionary<string, object>() { { "password", this.password }, { "balance", this.balance } });
+        users.Add(this.cardNO, new Dictionary<string, object>() { { "password", this.password }, { "balance", this.balance } });
         return true;
     }
     /// <summary>
@@ -43,10 +43,16 @@ class User
     /// <returns>bool</returns>
     public bool checkCardnumberAndPassword()
     {
-        if (!this.users.ContainsKey(this.cardNO))
+        if (users.ContainsKey(this.cardNO) == false)
+        {
+            System.Console.WriteLine("user does not exists");
             return false;
-        if ((string)this.users[this.cardNO]["password"] != this.password)
+        }
+        if ((string)users[this.cardNO]["password"] != this.password)
+        {
+            System.Console.WriteLine("password inccorect");
             return false;
+        }
         return true;
     }
     /// <summary>
@@ -55,7 +61,7 @@ class User
     /// <returns>bool</returns>
     public bool checkCardnumber()
     {
-        if (!this.users.ContainsKey(this.cardNO))
+        if (!users.ContainsKey(this.cardNO))
             return false;
         return true;
     }
@@ -65,7 +71,24 @@ class User
     /// <returns>float</returns>
     public float getBalance()
     {
-        return (float)this.users[this.cardNO]["balance"];
+        return (float)users[this.cardNO]["balance"];
+    }
+
+    public void addCashToBalance_Deposit(float cash)
+    {
+        float temp = (float)users[this.cardNO]["balance"];
+        temp += cash;
+        users[this.cardNO]["balance"] = temp;
+    }
+
+    public bool DrawCash(float cash)
+    {
+        float temp = (float)users[this.cardNO]["balance"];
+        if (temp < cash)
+            return false;
+        temp -= cash;
+        users[this.cardNO]["balance"] = temp;
+        return true;
     }
     /*
     public void SaveUserToFile(string cardNumber, string password)
