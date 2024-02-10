@@ -59,9 +59,9 @@ class User
     /// if user not exists return false 
     /// </summary>
     /// <returns>bool</returns>
-    public bool checkCardnumber()
+    public bool checkCardnumber(string cardnumber)
     {
-        if (!users.ContainsKey(this.cardNO))
+        if (!users.ContainsKey(cardnumber))
             return false;
         return true;
     }
@@ -89,6 +89,30 @@ class User
         temp -= cash;
         users[this.cardNO]["balance"] = temp;
         return true;
+    }
+    /// <summary>
+    /// Transfer cash from one card to another
+    /// </summary>
+    /// <param name="cash">How much to Transfer</param>
+    /// <param name="cardNumber">Detination Card</param>
+    /// <returns>
+    ///     0:success-
+    ///     1:not enough cash-
+    ///     2:wrong destinnation card
+    /// </returns>
+    public int CardToCard(float cash, string cardNumber)
+    {
+        float temp = (float)users[this.cardNO]["balance"];
+        if (temp < cash)
+            return 1;
+        if (!checkCardnumber(cardNumber))
+            return 2;
+        temp -= cash;
+        users[this.cardNO]["balance"] = temp;
+        temp = (float)users[cardNumber]["balance"];
+        temp += cash;
+        users[cardNumber]["balance"] = temp;
+        return 0;
     }
     /*
     public void SaveUserToFile(string cardNumber, string password)

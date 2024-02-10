@@ -122,7 +122,65 @@ static class ATM
     /// <exception cref="NotImplementedException"></exception>
     private static void CardToCard()
     {
-        throw new NotImplementedException();
+        User user = new(cardnumber);
+        Console.Clear();
+        System.Console.WriteLine("How much to want to Transfer? ");
+        System.Console.Write("Dollars: ");
+        bool success = float.TryParse(Console.ReadLine(), out float cash);
+        if (success == false)
+        {
+            System.Console.WriteLine("Please write Numbers!");
+            Deposit();
+        }
+        System.Console.Write("Write Destination Card: ");
+        string destinationCardnumber = Console.ReadLine();
+        if (string.IsNullOrEmpty(destinationCardnumber))
+        {
+            Console.WriteLine("\tPlease do not leave fields empty!\nTry again!");
+            CardToCard();
+        }
+        switch (user.CardToCard(cash, destinationCardnumber))
+        {
+            case 0:
+                System.Console.WriteLine("It was success");
+                System.Console.WriteLine("Your new Balance is : {0}", user.getBalance());
+                System.Console.WriteLine("What next ? ");
+                System.Console.WriteLine("1- Another Work");
+                System.Console.WriteLine("0- Exit");
+                success = int.TryParse(Console.ReadLine(), out int choice);
+                if (success == false)
+                {
+                    System.Console.WriteLine("Please write Numbers!");
+                    Console.ReadKey();
+                    CardToCard();
+                }
+                else
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            UserMenu();
+                            break;
+                        case 0:
+                            ExitMenu();
+                            break;
+                        default:
+                            System.Console.WriteLine("\tPlease choose from menu!");
+                            UserMenu();
+                            break;
+
+                    }
+                }
+                break;
+            case 1:
+                System.Console.WriteLine("Your Balance is not enough!");
+                UserMenu();
+                break;
+            case 2:
+                System.Console.WriteLine("Destination Card is not Valid!");
+                UserMenu();
+                break;
+        }
     }
     /// <summary>
     /// menu that handles view the balance for user
